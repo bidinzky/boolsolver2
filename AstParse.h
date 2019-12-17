@@ -6,6 +6,7 @@
 #define BOOLPARSER_ASTPARSE_H
 
 #include "AstType.h"
-void parse(std::string str, AST* ast, AST_Registry* reg);
+void parse(const char* str, size_t str_len, AST* ast, AST_Registry* reg);
+void parse(const char* str, AST* ast, AST_Registry* reg);
 
 #endif //BOOLPARSER_ASTPARSE_H

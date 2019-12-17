@@ -4,7 +4,12 @@
 
 #include "AstParse.h"
 using namespace std;
-void parse(string str, AST* ast, AST_Registry* reg) {
+void parse(const char* str, AST* ast, AST_Registry* reg) {
+    size_t i = 0;
+    for(;str[i] != '\0';i++){}
+    parse(str, i,ast,reg);
+}
+void parse(const char* str, size_t str_len, AST* ast, AST_Registry* reg) {
     bool is_not = false;
     bool is_bracket = false;
     AST bracket_data = AST();
@@ -13,7 +18,10 @@ void parse(string str, AST* ast, AST_Registry* reg) {
     int start_index;
     int stop_index;
     int bracket_count;
-    for(int i = 0; i<str.length();i++) {
+    for(int i = 0; i<str_len;i++) {
+        if(str[i] == '\0'){
+            break;
+        }
         switch (str[i]) {
             case '&':
                 ast->op = AST_OP::AND;
@@ -39,9 +47,9 @@ void parse(string str, AST* ast, AST_Registry* reg) {
                         bracket_count++;
                     }
                     stop_index++;
-                }while(stop_index < str.length() && bracket_count > 0);
-
-                parse(str.substr(start_index, stop_index-start_index-1), &bracket_data, reg);
+                }while(stop_index < str_len && bracket_count > 0);
+                //str.substr(start_index, stop_index-start_index-1)
+                parse(str + start_index,stop_index-start_index-1, &bracket_data, reg);
                 ast_data = bracket_data;
                 i = stop_index-2;
                 break;
