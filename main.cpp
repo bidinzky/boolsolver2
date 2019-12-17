@@ -7,7 +7,8 @@ int main() {
     AST_Registry reg;
     AST a;
     std::string s;
-
+    auto window = initscr();
+    
     while(true) {
         printf("input boolean expression: ");
         getline(std::cin, s);
@@ -17,10 +18,5 @@ int main() {
         TruthTable::print_table(&a, &reg);
         printf("\n");
     }
-    /*parse("a&(b^!c)", &a, &reg);
-    TruthTable tt = TruthTable(&a, &reg);
-    TruthTable::print_table(&a, &reg);
-    TruthTable::print_table(tt);
-
-    return 0;*/
+    return 0;
 }
