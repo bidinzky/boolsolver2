@@ -9,40 +9,40 @@
 
 bool exec(AST* ast);
 bool exec(std::variant<AST, bool*>* var);
-struct TruthTablePrint {
-    std::vector<char> varnames;
-    std::vector<std::vector<bool>> data;
-};
+
 class TruthTable {
 public:
-    TruthTable(AST* ast, AST_Registry* reg): reg(reg), ast(ast), i(0) {}
-    TruthTable(AST* ast, AST_Registry* reg, int i): reg(reg), ast(ast), i(i) {}
+    TruthTable(AST *ast, AST_Registry *reg) : reg(reg), ast(ast), i(0) {}
 
-    TruthTable begin() const {
-        return TruthTable(this->ast,this->reg, 0);
+    TruthTable(AST *ast, AST_Registry *reg, unsigned int i) : reg(reg), ast(ast), i(i) {}
+
+    [[nodiscard]] TruthTable begin() const {
+        return TruthTable(this->ast, this->reg, 0);
     }
 
-    TruthTable end() const {
-        return TruthTable(this->ast,this->reg, (1<<this->reg->size()));
+    [[nodiscard]] TruthTable end() const {
+        return TruthTable(this->ast, this->reg, (1u << this->reg->size()));
     }
 
-    bool operator!= (TruthTable const& other) const {
+    bool operator!=(TruthTable const &other) const {
         return this->i != other.i;
     }
 
-    std::vector<bool> operator* () const;
+    std::vector<bool> operator*() const;
 
-    TruthTable const&operator++() {
+    TruthTable const &operator++() {
         this->i++;
         return *this;
     }
 
-    static void print_table(const TruthTable& ttp);
-    static void print_table(AST* ast, AST_Registry* ttp);
+    static void print(AST *ast, AST_Registry *reg);
+
+    static void print(const TruthTable &ttp);
+
 private:
-    AST* ast;
-    AST_Registry* reg;
-    int i;
+    AST *ast;
+    AST_Registry *reg;
+    unsigned int i;
 };
 
 #endif //BOOLPARSER_ASTEXECUTE_H

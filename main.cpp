@@ -5,18 +5,20 @@
 
 int main() {
     AST_Registry reg;
-    AST a;
+    AST a = AST();
     std::string s;
-    auto window = initscr();
-    
+
     while(true) {
         printf("input boolean expression: ");
         getline(std::cin, s);
+        if (s.empty()) {
+            return 0;
+
+        }
         reg.clear();
         a.data.clear();
-        parse(s, &a, &reg);
-        TruthTable::print_table(&a, &reg);
+        parse(s.c_str(), &a, &reg);
+        TruthTable::print(&a, &reg);
         printf("\n");
     }
-    return 0;
 }
