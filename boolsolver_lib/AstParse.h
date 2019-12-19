@@ -7,8 +7,8 @@
 
 #include "AstType.h"
 
-void parse(const char *str, size_t length, AST *ast, AST_Registry *reg);
+AST parse(const char *str, size_t length, AST_Registry *reg);
 
-void parse(const char *str, AST *ast, AST_Registry *reg);
+AST parse(const char *str, AST_Registry *reg);
 
 #endif //BOOLPARSER_ASTPARSE_H

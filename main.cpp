@@ -1,13 +1,12 @@
-#include "AstParse.h"
-#include "AstExecute.h"
+#include "boolsolver_lib/AstParse.h"
+#include "boolsolver_lib/AstExecute.h"
 #include <iostream>
 
 int main() {
     AST_Registry reg;
-    AST a = AST();
     std::string s;
 
-    while(true) {
+    while (true) {
         printf("input boolean expression: ");
         getline(std::cin, s);
         if (s.empty()) {
@@ -15,8 +14,7 @@ int main() {
 
         }
         reg.clear();
-        a.data.clear();
-        parse(s.c_str(), &a, &reg);
+        AST a = parse(s.c_str(), &reg);
         TruthTable::print(&a, &reg);
         printf("\n");
     }

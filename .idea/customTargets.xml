@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CLionExternalBuildManager">
+    <target id="5f71d060-11f6-42b0-b8fe-c41a4b23ea82" name="MINGW" projectName="boolparser">
+      <configuration id="4343be78-d551-4730-b4ac-677581edcde7" name="MINGW" toolchainName="MinGW" />
+    </target>
+    <target id="8ec5d928-b76e-4b7a-895a-0e598754582d" name="Unnamed" projectName="boolparser">
+      <configuration id="20be9a60-88c2-45dc-9e78-fc37221876f9" name="Unnamed" />
+    </target>
+  </component>
+</project>
