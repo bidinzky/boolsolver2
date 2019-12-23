@@ -7,17 +7,18 @@ int main() {
     AST_Registry reg;
     std::string s = std::string();
 
-    /*while (true) {
+    while (true) {
         printf("input boolean expression: ");
+        s.clear();
         getline(std::cin, s);
         if (s.empty()) {
             return 0;
 
         }
-        reg.clear();*/
-        s = "(a&b)|((!c)^a)";
+        reg.clear();
+        //s = "(a&b)|((!c)^a)";
         AST a = parse(s.c_str(), &reg);
-        auto res = generate_cdnf(&a, &reg);
-        //TruthTable::print(&a, &reg);
-    //}
+        //auto res = generate_cdnf(&a, &reg);
+        TruthTable::print(&a, &reg);
+    }
 }
