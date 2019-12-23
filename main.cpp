@@ -19,6 +19,5 @@ int main() {
         AST a = parse(s.c_str(), &reg);
         auto res = generate_cdnf(&a, &reg);
         //TruthTable::print(&a, &reg);
-        printf("\n");
     //}
 }
