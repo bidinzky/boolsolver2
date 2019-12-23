@@ -7,8 +7,8 @@ int main() {
     std::string s;
 
     while (true) {
-        printf("input boolean expression: ");
-        getline(std::cin, s);
+        std::cout << "input boolean expression: ";
+        std::cin >> s;
         if (s.empty()) {
             return 0;
 
