@@ -47,9 +47,9 @@ public:
 
     static void print(const TruthTable &ttp);
 
-private:
     AST *ast;
     AST_Registry *reg;
+private:
     unsigned int i;
 };
 

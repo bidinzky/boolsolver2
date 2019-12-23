@@ -10,11 +10,9 @@
 #include <unordered_map>
 
 enum AST_OP {
-    AND,
-    OR,
-    XOR,
-    NOT
+    AND,OR,XOR,NOT
 };
+
 using AST_Registry = std::unordered_map<char, bool>;
 typedef struct AST {
     AST_OP op;
