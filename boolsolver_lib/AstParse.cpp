@@ -73,5 +73,7 @@ AST parse(const char *str, size_t length, AST_Registry *reg) {
 }
 
 AST parse(const char *str, AST_Registry *reg) {
-    return parse(str, numeric_limits<size_t>::max(), reg);
+    int i = 0;
+    for(;str[i] != '\0'; i++);
+    return parse(str, i, reg);
 }

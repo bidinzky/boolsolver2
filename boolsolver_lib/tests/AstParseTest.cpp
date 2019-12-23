@@ -1,11 +1,11 @@
 //
 // Created by Lukas on 19.12.2019.
 //
-
-#include "gtest/gtest.h"
+#include <catch2/catch.hpp>
 #include "AstParse.h"
 #include "AstExecute.h"
-#include <vector>
+#include "AstType.h"
+
 
 using c_str = const char *;
 
@@ -15,21 +15,14 @@ void compare_asts(AST *a1, AST *a2, AST_Registry *reg) {
     do {
         auto vec1 = v1.exec();
         auto vec2 = v2.exec();
-        if (vec1.size() != vec2.size()) {
-            ADD_FAILURE() << "size of vectors not equal";
-        }
-        ASSERT_EQ(vec1[vec1.size() - 1], vec2[vec1.size() - 1]);
+        REQUIRE(vec1.size() == vec2.size());
+        REQUIRE(vec1[vec1.size() - 1] == vec2[vec1.size() - 1]);
         v1.inc();
         v2.inc();
     } while (v1 != v1.end());
 }
 
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
-
-TEST(AstParse, AND) {
+TEST_CASE("parse AND") {
     AST ast = AST();
     AST_Registry reg = AST_Registry();
     AST simple_op = AST();
@@ -39,10 +32,11 @@ TEST(AstParse, AND) {
     simple_op.op = AST_OP::AND;
     simple_op.data.emplace_back(&reg['a']);
     simple_op.data.emplace_back(&reg['b']);
+    REQUIRE(ast == simple_op);
     compare_asts(&ast, &simple_op, &reg);
 }
 
-TEST(AstParse, OR) {
+TEST_CASE("parse OR") {
     AST ast = AST();
     AST_Registry reg = AST_Registry();
     AST simple_op = AST();
@@ -52,10 +46,11 @@ TEST(AstParse, OR) {
     simple_op.op = AST_OP::OR;
     simple_op.data.emplace_back(&reg['a']);
     simple_op.data.emplace_back(&reg['b']);
+    REQUIRE(ast == simple_op);
     compare_asts(&ast, &simple_op, &reg);
 }
 
-TEST(AstParse, NOT) {
+TEST_CASE("parse NOT") {
     AST ast = AST();
     AST_Registry reg = AST_Registry();
     AST simple_op = AST();
@@ -64,10 +59,11 @@ TEST(AstParse, NOT) {
     ast = parse(s3, 2, &reg);
     simple_op.op = AST_OP::NOT;
     simple_op.data.emplace_back(&reg['a']);
+    REQUIRE(ast == simple_op);
     compare_asts(&ast, &simple_op, &reg);
 }
 
-TEST(AstParse, XOR) {
+TEST_CASE("parse XOR") {
     AST ast = AST();
     AST_Registry reg = AST_Registry();
     reg.try_emplace('a');
@@ -80,10 +76,11 @@ TEST(AstParse, XOR) {
     simple_op.op = AST_OP::XOR;
     simple_op.data.emplace_back(&reg['a']);
     simple_op.data.emplace_back(&reg['b']);
+    REQUIRE(ast == simple_op);
     compare_asts(&ast, &simple_op, &reg);
 }
 
-TEST(AstParse, Complex1) {
+TEST_CASE("parse complex function1") {
     AST ast = AST();
     AST bracket = AST();
     AST_Registry reg = AST_Registry();
@@ -100,10 +97,11 @@ TEST(AstParse, Complex1) {
     bracket.data.emplace_back(&reg['b']);
     bracket.data.emplace_back(&reg['c']);
     simple_op.data.emplace_back(bracket);
+    REQUIRE(ast == simple_op);
     compare_asts(&ast, &simple_op, &reg);
 }
 
-TEST(AstParse, Complex2) {
+TEST_CASE("parse complex function2") {
     AST ast = AST();
     AST bracket = AST();
     AST n = AST();
@@ -122,10 +120,11 @@ TEST(AstParse, Complex2) {
     n.data.emplace_back(&reg['c']);
     bracket.data.emplace_back(n);
     simple_op.data.emplace_back(bracket);
+    REQUIRE(ast == simple_op);
     compare_asts(&ast, &simple_op, &reg);
 }
 
-TEST(AstParse, Complex3) {
+TEST_CASE("parse complex function3") {
     AST o = AST();
     AST a = AST();
     AST ast = AST();
@@ -142,5 +141,7 @@ TEST(AstParse, Complex3) {
     o.op = AST_OP::OR;
     o.data.emplace_back(a);
     o.data.emplace_back(&reg['c']);
+    CAPTURE(ast);
+    REQUIRE(ast == o);
     compare_asts(&ast, &o, &reg);
 }

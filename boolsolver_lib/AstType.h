@@ -19,4 +19,8 @@ typedef struct AST {
     std::vector<std::variant<AST, bool *>> data;
 } AST;
 
+bool operator==(const AST& lhs, const AST& rhs);
+void print(std::string* s, AST const& value, unsigned int offset);
+void print(std::string* s, AST const& value);
+std::ostream& operator<<(std::ostream& os, AST const& ty);
 #endif //BOOLPARSER_ASTTYPE_H
