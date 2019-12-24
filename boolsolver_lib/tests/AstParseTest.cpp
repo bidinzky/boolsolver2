@@ -141,7 +141,6 @@ TEST_CASE("parse complex function3") {
     o.op = AST_OP::OR;
     o.data.emplace_back(a);
     o.data.emplace_back(&reg['c']);
-    CAPTURE(ast);
     REQUIRE(ast == o);
     compare_asts(&ast, &o, &reg);
 }

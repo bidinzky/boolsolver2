@@ -17,7 +17,7 @@ int main() {
         reg.clear();*/
         s = "(a&b)|((!c)^a)";
         AST a = parse(s.c_str(), &reg);
-        auto res = generate_cdnf(&a, &reg);
+        auto res = optimize(&a, &reg);
         //TruthTable::print(&a, &reg);
     //}
 }

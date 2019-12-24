@@ -13,11 +13,97 @@
 
 using namespace std;
 
-struct NOTHING_MARKER {};
 
-using variant_ty = variant<AST, bool *, NOTHING_MARKER>;
+using Minterm = vector<char>;
+using BoolTable = vector<Minterm>; //0,1, all else is dont care
+struct MintermOnes {
+    int ones;
+    int dont_care;
+};
 
-typedef struct optimizerAst {
+MintermOnes nr_ones(Minterm const& mt) {
+    MintermOnes mto = MintermOnes();
+    for(char i : mt) {
+        if(i == 1) {
+            mto.ones++;
+        }else if(i != 0) {
+            mto.dont_care++;
+        }
+    }
+    return mto;
+}
+
+bool equal_nr_ones(Minterm const& mt1,Minterm const& mt2) {
+    int nr_diff = 0;
+    for(int i = 0;i<mt1.size();i++) {
+        if(mt1[i] != mt2[i]) {
+            if(mt1[i] != 0 && mt2[i] != 0) {
+
+            }
+        }
+    }
+    auto nr_mt1 = nr_ones(mt1);
+    auto nr_mt2 = nr_ones(mt2);
+
+    if(nr_mt1.ones > nr_mt2.ones) {
+        return (nr_mt1.ones - nr_mt2.ones - nr_mt2.dont_care) <= 1;
+    }else{
+        return (nr_mt2.ones - nr_mt1.ones - nr_mt1.dont_care) <= 1;
+    }
+}
+Minterm minterm_diff(const Minterm& a, const Minterm& b) {
+    Minterm min;
+    for(int i = 0;i<a.size();i++) {
+        if(a[i] != b[i]) {
+            if(a[i] != 0 && b[i] != 0) {
+                min.emplace_back(1);
+            }else if(a[i] != 1 && b[i] != 1) {
+                min.emplace_back(0);
+            }else if(a[i] <= 1 && b[i] <= 1) {
+                min.emplace_back(2);
+            }else{
+                throw "error";
+            }
+        }else{
+            min.emplace_back(a[i]);
+        }
+    }
+    return min;
+}
+
+BoolTable optimize(BoolTable& bt) {
+    BoolTable bt2;
+    for(int i = 0;i<bt.size();i++) {
+        for(int j = i+1;j<bt.size();j++) {
+            if(bt[i] != bt[j]) {
+                if(equal_nr_ones(bt[i], bt[j])) {
+                    bt2.emplace_back(minterm_diff(bt[i],bt[j]));
+                }
+            }
+        }
+    }
+    return bt2;
+}
+BoolTable optimize(TruthTable const& tt) {
+    BoolTable bt;
+    for(auto i : tt) {
+        if(i[i.size()-1]) {
+            //wenn true
+            i.pop_back(); //remove function value --> ist immer true;
+            Minterm vc;
+            for(auto j : i){
+                vc.emplace_back(j);
+            }
+            bt.emplace_back(vc);
+        }
+    }
+    return optimize(bt);
+}
+BoolTable optimize(AST* ast, AST_Registry* reg) {
+    return optimize(TruthTable(ast, reg));
+}
+
+/*typedef struct optimizerAst {
     AST_OP op;
     vector<variant_ty> data;
 } Optimizer_AST;
@@ -81,6 +167,6 @@ vector<AST> generate_cdnf(TruthTable tt) {
 }
 vector<AST> generate_cdnf(AST* ast, AST_Registry* reg) {
     return generate_cdnf(TruthTable(ast, reg));
-}
+}*/
 
 #endif //BOOLPARSER_ASTOPTIMIZE_H
