@@ -14,10 +14,18 @@ enum AST_OP {
 };
 
 using AST_Registry = std::unordered_map<char, bool>;
-typedef struct AST {
+class AST {
+public:
+    AST() = default;;
+    explicit AST(AST_OP o): op(o) {}
+    AST(AST_OP op, std::variant<AST, bool *> &data) : op(op), data(1, data) {}
+
+    template <typename...Args>
+    AST(AST_OP op, Args... args): op(op), data({args...}) {};
+
     AST_OP op;
     std::vector<std::variant<AST, bool *>> data;
-} AST;
+};
 
 bool operator==(const AST& lhs, const AST& rhs);
 void print(std::string* s, AST const& value, unsigned int offset);

@@ -57,8 +57,7 @@ AST parse(const char *str, size_t length, AST_Registry *reg) {
 
                 if (is_not) {
                     is_not = false;
-                    AST a;
-                    a.op = AST_OP::NOT;
+                    AST a(AST_OP::NOT);
                     a.data.emplace_back(ast_data);
                     ast_data = a;
                 }

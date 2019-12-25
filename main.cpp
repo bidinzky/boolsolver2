@@ -15,9 +15,14 @@ int main() {
 
         }
         reg.clear();*/
-        s = "(a&b)|((!c)^a)";
+        s = "(a&b)^(!c|b)";
+        reg.emplace('a', false);
+        reg.emplace('b', false);
+        reg.emplace('c', false);
         AST a = parse(s.c_str(), &reg);
+        TruthTable::print(&a, &reg);
         auto res = optimize(&a, &reg);
+        TruthTable::print(&res, &reg);
         //TruthTable::print(&a, &reg);
     //}
 }
