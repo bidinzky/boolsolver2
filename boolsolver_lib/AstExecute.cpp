@@ -39,16 +39,16 @@ bool exec(variant<AST, bool *> *var) {
     }
 }
 
-void TruthTable::print(AST *ast, AST_Registry *reg) {
-    TruthTable::print(TruthTable(ast, reg));
+void TruthTable::print(AST *ast) {
+    TruthTable::print(TruthTable(ast));
 }
 
 void TruthTable::print(const TruthTable &ttp) {
-    auto max_size = ttp.reg->size() * 5 + 6;
+    auto max_size = ttp.ast->reg->size() * 5 + 6;
     cout << string(max_size, '-') << "\n";
     cout << "|";
 
-    for (auto varname : *ttp.reg) {
+    for (auto varname : *ttp.ast->reg) {
         cout << " " << varname.first << " " << "|";
     }
     cout << "| res |\n";
@@ -66,11 +66,11 @@ void TruthTable::print(const TruthTable &ttp) {
 
 std::vector<bool> TruthTable::exec() const {
     vector<bool> res;
-    unsigned long j = this->reg->size() - 1;
-    for (auto &r: *this->reg) {
+    unsigned long j = this->ast->reg->size() - 1;
+    for (auto &r: *this->ast->reg) {
         bool var_state = this->i & (1u << j);
         res.push_back(var_state);
-        this->reg->insert_or_assign(r.first, var_state);
+        this->ast->reg->insert_or_assign(r.first, var_state);
         j--;
     }
     res.push_back(::exec(this->ast));

@@ -10,6 +10,7 @@ AST parse(const char *str, size_t length, AST_Registry *reg) {
     bool is_not = false;
     bool is_bracket = false;
     AST ast = AST();
+    ast.reg = reg;
     variant<AST, bool *> ast_data;
 
     int start_index;

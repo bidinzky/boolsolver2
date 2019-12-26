@@ -12,16 +12,16 @@ bool exec(std::variant<AST, bool*>* var);
 
 class TruthTable {
 public:
-    TruthTable(AST *ast, AST_Registry *reg) : reg(reg), ast(ast), i(0) {}
+    TruthTable(AST *ast) : ast(ast), i(0) {}
 
-    TruthTable(AST *ast, AST_Registry *reg, unsigned int i) : reg(reg), ast(ast), i(i) {}
+    TruthTable(AST *ast, unsigned int i) :  ast(ast), i(i) {}
 
     [[nodiscard]] TruthTable begin() const {
-        return TruthTable(this->ast, this->reg, 0);
+        return TruthTable(this->ast, 0);
     }
 
     [[nodiscard]] TruthTable end() const {
-        return TruthTable(this->ast, this->reg, (1u << this->reg->size()));
+        return TruthTable(this->ast, (1u << this->ast->reg->size()));
     }
 
     bool operator!=(TruthTable const &other) const {
@@ -43,12 +43,11 @@ public:
         this->i++;
     }
 
-    static void print(AST *ast, AST_Registry *reg);
+    static void print(AST *ast);
 
     static void print(const TruthTable &ttp);
 
     AST *ast;
-    AST_Registry *reg;
 private:
     unsigned int i;
 };

@@ -18,7 +18,8 @@ int main() {
         reg.clear();
         //s = "(a&b)|((!c)^a)";
         AST a = parse(s.c_str(), &reg);
+        std::cout << a;
         //auto res = generate_cdnf(&a, &reg);
-        TruthTable::print(&a, &reg);
+        TruthTable::print(&a);
     }
 }

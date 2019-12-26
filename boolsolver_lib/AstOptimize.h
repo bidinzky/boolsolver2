@@ -53,10 +53,11 @@ vector<optimizerAst> generate_minterms(vector<AST> va) {
     }
     return generate_minterms(op_ast);
 }
+
 vector<AST> generate_cdnf(TruthTable tt) {
     vector<AST> v;
     vector<bool*> vars;
-    for(auto i : *tt.reg) {
+    for(auto i : *tt.ast->reg) {
         vars.emplace_back(&i.second);
     }
     for(vector<bool> i : tt){
@@ -79,8 +80,8 @@ vector<AST> generate_cdnf(TruthTable tt) {
     auto z = generate_minterms(v);
     return v;
 }
-vector<AST> generate_cdnf(AST* ast, AST_Registry* reg) {
-    return generate_cdnf(TruthTable(ast, reg));
+vector<AST> generate_cdnf(AST* ast) {
+    return generate_cdnf(TruthTable(ast));
 }
 
 #endif //BOOLPARSER_ASTOPTIMIZE_H

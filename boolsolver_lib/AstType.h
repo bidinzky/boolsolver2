@@ -17,10 +17,10 @@ using AST_Registry = std::unordered_map<char, bool>;
 typedef struct AST {
     AST_OP op;
     std::vector<std::variant<AST, bool *>> data;
+    AST_Registry* reg;
+    void print(std::ostream& os, bool last = true) const;
 } AST;
 
 bool operator==(const AST& lhs, const AST& rhs);
-void print(std::string* s, AST const& value, unsigned int offset);
-void print(std::string* s, AST const& value);
 std::ostream& operator<<(std::ostream& os, AST const& ty);
 #endif //BOOLPARSER_ASTTYPE_H
