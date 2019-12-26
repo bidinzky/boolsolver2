@@ -48,37 +48,49 @@ bool operator==(const AST& lhs, const AST& rhs) {
     return true;
 }
 
-void AST::print(std::ostream& os, bool last) const {
-    char op;
-    switch (this->op) {
-        case AND:
-            op = '&';
-            break;
-        case OR:
-            op = '|';
-            break;
-        case NOT:
-            op = '!';
-            break;
-        case XOR:
-            op = '^';
-            break;
-        default:
-            op = '\0';
-    }
-
-    for(int i = 0;i<this->data.size();i++) {
-        auto val = this->data[i];
-        if(std::holds_alternative<AST>(val)){
-            os << "(";
-            std::get<AST>(val).print(os, false);
-            os << ")";
+void handle_print(std::ostream& os, std::variant<AST, bool*> const& val, AST_Registry* reg){
+    if(std::holds_alternative<AST>(val)){
+            AST ast = std::get<AST>(val);
+            if(ast.op != NOT || std::holds_alternative<AST>(ast.data[0])) {
+                os << "(";
+            }
+            ast.print(os, false);
+            if(ast.op != NOT || std::holds_alternative<AST>(ast.data[0])) {
+                os << ")";
+            }
         }else{
             bool* b = std::get<bool*>(val);
-            os << findVarByValue(this->reg, b);
+            os << findVarByValue(reg, b);
         }
-        if(i < (this->data.size() - 1)) {
-            os << op;
+
+}
+
+void AST::print(std::ostream& os, bool last) const {
+    if(this->op == NOT) {
+        os << '!';
+        auto i = this->data[0];
+        handle_print(os, i, this->reg);
+    }else{
+        char op;
+        switch (this->op) {
+            case AND:
+                op = '&';
+                break;
+            case OR:
+                op = '|';
+                break;
+            case XOR:
+                op = '^';
+                break;
+            default:
+                op = '\0';
+        }
+
+        for(int i = 0;i<this->data.size();i++) {
+            handle_print(os, this->data[i], this->reg);
+            if(i < (this->data.size() - 1)) {
+                os << op;
+            }
         }
     }
 
